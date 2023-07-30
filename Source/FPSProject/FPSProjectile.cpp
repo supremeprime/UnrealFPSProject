@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "FPSTarget.h"
 #include "FPSProjectile.h"
 
 // Sets default values
@@ -17,15 +17,15 @@ AFPSProjectile::AFPSProjectile()
 		CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 		CollisionComponent->BodyInstance.SetCollisionProfileName(TEXT("Projectile"));
 		CollisionComponent->OnComponentHit.AddDynamic(this, &AFPSProjectile::OnHit);
-		CollisionComponent->InitSphereRadius(15.0f);
+		CollisionComponent->InitSphereRadius(7.0f);
 		RootComponent = CollisionComponent;
 	}
 
 	if (!ProjectileMovementComponent) {
 		ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 		ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
-		ProjectileMovementComponent->InitialSpeed = 3000.0f;
-		ProjectileMovementComponent->MaxSpeed = 3000.0f;
+		ProjectileMovementComponent->InitialSpeed = 6000.0f;
+		ProjectileMovementComponent->MaxSpeed = 6000.0f;
 		ProjectileMovementComponent->bRotationFollowsVelocity = true;
 		ProjectileMovementComponent->bShouldBounce = true;
 		ProjectileMovementComponent->Bounciness = 0.3f;
@@ -72,8 +72,12 @@ void AFPSProjectile::FireInDirection(const FVector& ShootDirection) {
 
 void AFPSProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) {
 	if (OtherActor != this && OtherComponent->IsSimulatingPhysics()) {
-		OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
+		//OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Hit object!"));
+		if (OtherActor && (OtherActor != this) && OtherComponent && OtherActor->IsA(AFPSTarget::StaticClass())) {
+			AFPSTarget* target = Cast<AFPSTarget>(OtherActor);
+			target->TakeDamage();
+		}
 	}
 	Destroy();
 }
