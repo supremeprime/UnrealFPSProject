@@ -2,6 +2,7 @@
 
 
 #include "FPSCharacter.h"
+#include "TargetActor.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()

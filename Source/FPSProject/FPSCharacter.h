@@ -53,7 +53,9 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 		USkeletalMeshComponent* FPSMesh;
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		FVector MuzzleOffset;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Target")
+		int maxShootDistance;
 };

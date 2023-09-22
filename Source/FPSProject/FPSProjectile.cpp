@@ -2,6 +2,7 @@
 
 #include "FPSTarget.h"
 #include "FPSProjectile.h"
+#include "TargetActor.h"
 
 // Sets default values
 AFPSProjectile::AFPSProjectile()
@@ -71,12 +72,11 @@ void AFPSProjectile::FireInDirection(const FVector& ShootDirection) {
 }
 
 void AFPSProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) {
-	if (OtherActor != this && OtherComponent->IsSimulatingPhysics()) {
-		//OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
+	if (OtherActor && OtherActor != this && OtherComponent) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Hit object!"));
-		if (OtherActor && (OtherActor != this) && OtherComponent && OtherActor->IsA(AFPSTarget::StaticClass())) {
-			AFPSTarget* target = Cast<AFPSTarget>(OtherActor);
-			target->TakeDamage();
+		ATargetActor* Target = Cast<ATargetActor>(OtherActor);
+		if (Target) {
+			Target->TakeHit();
 		}
 	}
 	Destroy();
