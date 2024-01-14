@@ -20,8 +20,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target")
 		int maxHitPoints;
 
-private:
-	int currentHitPoints;
+	int GetHealth();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target")
+		int currentHitPoints;
+
 
 protected:
 	// Called when the game starts or when spawned
